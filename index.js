@@ -116,27 +116,41 @@ app.post("post-prescription", async (req, res) => {
 
 });
 
-//This one is for adding patients for the loggedIn caregiver
-app.post("/add-patient", async (req, res) => {
-  const caregiver_id = req.body.caregiver_id;
-  const patient_email = req.body.patient_email;
+app.post("/send-notification", async (req, res) => {
+  const sender_id = req.body.sender_id;
+  const receiver_email = req.body.receiver_email;
+  const sender_type = req.body.sender_type;
 
-  try{
-    const patient_result = await db.query("select patient_id from patients where email = $1", [patient_email]);
+  console.log("Receive notif");
+  
+  const context = sender_type === "caregiver" ? "caregivers" : "patients";
+  const receiver_type = sender_type === "caregiver" ? "patient" : "caregiver";
 
-    if (patient_result.rows.length === 0){
-      return res.json({"response": "Patient not found"});
+  let receiver_id = null;
+
+  try {
+    if (context === "caregivers"){
+      const receiver_result = await db.query("select caregiver_id from caregivers where email = $1", [receiver_email]);
+      receiver_id = receiver_result.rows[0].caregiver_id;
+    } else {
+      const receiver_result = await db.query("select patient_id from patients where email = $1", [receiver_email]);
+      receiver_id = receiver_result.rows[0].patient_id;
     }
 
-    const patient_id = patient_result.rows[0].patient_id;
+    console.log("Set Contenxt")
 
-    const result = await db.query("insert into caregiver_patients (caregiver_id, patient_id) values ($1, $2)", [caregiver_id, patient_id]);
-    res.json({"response": "success"})
+    const result = await db.query("insert into notifications (sender_id, sender_type, receiver_id, receiver_type) values ($1, $2, $3, $4)", [sender_id, sender_type, receiver_id, receiver_type]);
+    res.json({"response": "success"});
 
-  } catch (error){
-    res.json({"response": error})
+  } catch (error) {
+    console.log(error)
+    res.json({"response": error});
   }
+  
+  
 });
+
+//
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
