@@ -54,22 +54,43 @@ app.post("/register", async (req, res) => {
   try {
     const email = req.body.email;
     const password = req.body.password;
+    const role = req.body.role;
 
-    const checkUser = await db.query("select * from patients where email = $1", [email]);
-    if (checkUser.rows.length > 0){
-      res.json({"response": "User already exists"});
-    } else {
-      bcrypt.hash(password, salt_rounds, async (err, hash) => {
-        if (err){
-          console.log(err);
-        } else {
-          const result = await db.query("insert into patients (email, password) values ($1, $2) returning patient_id", [email, hash]);
-          const user_id = result.rows[0].patient_id;
-          res.json({ "response": "success", "userID": user_id });
-        }
-      })
-      
+    if (role === "caregiver"){
+      const checkUser = await db.query("select * from caregivers where email = $1", [email]);
+      if (checkUser.rows.length > 0){
+        res.json({"response": "User already exists"});
+      } else {
+        bcrypt.hash(password, salt_rounds, async (err, hash) => {
+          if (err){
+            console.log(err);
+          } else {
+            const result = await db.query("insert into caregivers (email, password) values ($1, $2) returning caregiver_id", [email, hash]);
+            const user_id = result.rows[0].caregiver_id;
+            res.json({ "response": "success", "userID": user_id });
+          }
+        })
+        
+      }
+    } else if (role === "patient"){
+      const checkUser = await db.query("select * from patients where email = $1", [email]);
+      if (checkUser.rows.length > 0){
+        res.json({"response": "User already exists"});
+      } else {
+        bcrypt.hash(password, salt_rounds, async (err, hash) => {
+          if (err){
+            console.log(err);
+          } else {
+            const result = await db.query("insert into patients (email, password) values ($1, $2) returning patient_id", [email, hash]);
+            const user_id = result.rows[0].patient_id;
+            res.json({ "response": "success", "userID": user_id });
+          }
+        })
+        
+      }
     }
+
+    
   } catch (error){
     res.json({"response": error});
   }
