@@ -55,6 +55,9 @@ app.post("/register", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const role = req.body.role;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
+    const phone_number = req.body.phone_number;
 
     if (role === "caregiver"){
       const checkUser = await db.query("select * from caregivers where email = $1", [email]);
@@ -65,7 +68,7 @@ app.post("/register", async (req, res) => {
           if (err){
             console.log(err);
           } else {
-            const result = await db.query("insert into caregivers (email, password) values ($1, $2) returning caregiver_id", [email, hash]);
+            const result = await db.query("insert into caregivers (email, password, first_name, last_name, phone_number) values ($1, $2, $3, $4, $5) returning caregiver_id", [email, hash, first_name, last_name, phone_number]);
             const user_id = result.rows[0].caregiver_id;
             res.json({ "response": "success", "userID": user_id });
           }
@@ -81,7 +84,7 @@ app.post("/register", async (req, res) => {
           if (err){
             console.log(err);
           } else {
-            const result = await db.query("insert into patients (email, password) values ($1, $2) returning patient_id", [email, hash]);
+            const result = await db.query("insert into patients (email, password, first_name, last_name, phone_number) values ($1, $2, $3, $4, $5) returning patient_id", [email, hash, first_name, last_name, phone_number]);
             const user_id = result.rows[0].patient_id;
             res.json({ "response": "success", "userID": user_id });
           }
@@ -98,6 +101,17 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("post-prescription", async (req, res) => {
+  const prescription_name = req.body.prescription_name;
+  const prescription_amount = req.body.prescription_amount;
+  const prescription_frequency = req.body.prescription_frequency;
+  const patient_id = req.body.patient_id;
+
+  try{
+    const result = await db.query("insert into prescriptions (patient_id, prescription_name, prescription_amount, prescription_frequency) values ($1, $2, $3, $4)", [patient_id, prescription_name, prescription_amount, prescription_frequency]);
+    res.json({"response": "success"})
+  } catch (error){
+    res.json({"response": error});
+  }
 
 });
 
