@@ -120,26 +120,25 @@ app.post("/send-notification", async (req, res) => {
   const sender_id = req.body.sender_id;
   const receiver_email = req.body.receiver_email;
   const sender_type = req.body.sender_type;
-
-  console.log("Receive notif");
   
   const context = sender_type === "caregiver" ? "caregivers" : "patients";
   const receiver_type = sender_type === "caregiver" ? "patient" : "caregiver";
 
   let receiver_id = null;
+  let message = null;
 
   try {
     if (context === "caregivers"){
       const receiver_result = await db.query("select caregiver_id from caregivers where email = $1", [receiver_email]);
       receiver_id = receiver_result.rows[0].caregiver_id;
+      message = "Patient to Caregiver";
     } else {
       const receiver_result = await db.query("select patient_id from patients where email = $1", [receiver_email]);
       receiver_id = receiver_result.rows[0].patient_id;
+      message = "Caregiver to Patient";
     }
 
-    console.log("Set Contenxt")
-
-    const result = await db.query("insert into notifications (sender_id, sender_type, receiver_id, receiver_type) values ($1, $2, $3, $4)", [sender_id, sender_type, receiver_id, receiver_type]);
+    const result = await db.query("insert into notifications (sender_id, sender_type, receiver_id, receiver_type, message) values ($1, $2, $3, $4, $5)", [sender_id, sender_type, receiver_id, receiver_type, message]);
     res.json({"response": "success"});
 
   } catch (error) {
@@ -149,8 +148,6 @@ app.post("/send-notification", async (req, res) => {
   
   
 });
-
-//
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
