@@ -100,6 +100,7 @@ app.post("/register", async (req, res) => {
 
 });
 
+//This one is for adding prescriptions for the patient (Potentially done through caregiver)
 app.post("post-prescription", async (req, res) => {
   const prescription_name = req.body.prescription_name;
   const prescription_amount = req.body.prescription_amount;
@@ -113,6 +114,28 @@ app.post("post-prescription", async (req, res) => {
     res.json({"response": error});
   }
 
+});
+
+//This one is for adding patients for the loggedIn caregiver
+app.post("/add-patient", async (req, res) => {
+  const caregiver_id = req.body.caregiver_id;
+  const patient_email = req.body.patient_email;
+
+  try{
+    const patient_result = await db.query("select patient_id from patients where email = $1", [patient_email]);
+
+    if (patient_result.rows.length === 0){
+      return res.json({"response": "Patient not found"});
+    }
+
+    const patient_id = patient_result.rows[0].patient_id;
+
+    const result = await db.query("insert into caregiver_patients (caregiver_id, patient_id) values ($1, $2)", [caregiver_id, patient_id]);
+    res.json({"response": "success"})
+
+  } catch (error){
+    res.json({"response": error})
+  }
 });
 
 app.listen(3000, () => {
