@@ -1,6 +1,6 @@
 // server.js
 import express from "express";
-import fetch from "node-fetch";
+import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
