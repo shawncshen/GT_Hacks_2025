@@ -20,13 +20,9 @@ app.post("/chat", async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
+    const response = await axios.post(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
         model: "llama-3.1-8b-instant",
         messages: [
           {
@@ -38,26 +34,23 @@ app.post("/chat", async (req, res) => {
         ],
         max_tokens: 200,
         temperature: 0.8,
-      }),
-    });
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+        },
+      }
+    );
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      return res
-        .status(response.status)
-        .json({ error: errorData.error?.message || "Groq API failed" });
-    }
-
-    const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || "No response generated.";
-
+    const aiResponse = response.data.choices?.[0]?.message?.content || "No response generated.";
     res.json({ reply: aiResponse });
   } catch (err) {
-    console.error("Server error:", err);
+    console.error("Server error:", err.response?.data || err.message);
     res.status(500).json({ error: "Something went wrong" });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
