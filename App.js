@@ -8,6 +8,9 @@ import PatientDetail from './components/PatientDetail';
 import PatientDashboard from './components/PatientDashboard';
 import CreateAccount from './components/CreateAccount';
 import CreateAccountForm from './components/CreateAccountForm';
+import PatientSelector from './components/PatientSelector';
+import CaregiverRequest from './components/CaregiverRequest';
+import ChatBot from './components/ChatBot';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +18,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [userID, setUserID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,10 +29,12 @@ function App() {
     try {
       const user = await AsyncStorage.getItem('currentUser');
       const role = await AsyncStorage.getItem('userRole');
+      const userId = await AsyncStorage.getItem('userID');
       if (user && role) {
         setIsAuthenticated(true);
         setCurrentUser(user);
         setUserRole(role);
+        setUserID(userId ? parseInt(userId) : null);
       }
     } catch (error) {
       console.error('Error checking auth state:', error);
@@ -37,13 +43,17 @@ function App() {
     }
   };
 
-  const handleLogin = async (username, role) => {
+  const handleLogin = async (username, role, userId = null) => {
     try {
       await AsyncStorage.setItem('currentUser', username);
       await AsyncStorage.setItem('userRole', role);
+      if (userId) {
+        await AsyncStorage.setItem('userID', userId.toString());
+      }
       setIsAuthenticated(true);
       setCurrentUser(username);
       setUserRole(role);
+      setUserID(userId);
     } catch (error) {
       console.error('Error saving user:', error);
     }
@@ -69,6 +79,16 @@ function App() {
     if (userRole === 'caregiver') {
       return (
         <>
+          <Stack.Screen name="PatientSelector">
+            {props => (
+              <PatientSelector
+                {...props}
+                currentUser={currentUser}
+                caregiverID={userID}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
           <Stack.Screen name="Dashboard">
             {props => (
               <Dashboard
@@ -85,15 +105,36 @@ function App() {
       );
     } else if (userRole === 'patient') {
       return (
-        <Stack.Screen name="PatientDashboard">
-          {props => (
-            <PatientDashboard
-              {...props}
-              currentUser={currentUser}
-              onLogout={handleLogout}
-            />
-          )}
-        </Stack.Screen>
+        <>
+          <Stack.Screen name="PatientDashboard">
+            {props => (
+              <PatientDashboard
+                {...props}
+                currentUser={currentUser}
+                patientID={userID}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="CaregiverRequest">
+            {props => (
+              <CaregiverRequest
+                {...props}
+                currentUser={currentUser}
+                patientID={userID}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="ChatBot">
+            {props => (
+              <ChatBot
+                {...props}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
+        </>
       );
     } else {
       return (

@@ -80,26 +80,49 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       Alert.alert('Validation Error', 'Please correct the errors and try again');
       return;
     }
 
-    // Here you would typically send the data to your backend
-    Alert.alert(
-      'Account Created Successfully!',
-      `Welcome ${formData.firstName}! Your ${formData.role} account has been created.`,
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            // Simulate successful account creation and login
-            onAccountCreated(formData.username, formData.role);
-          }
-        }
-      ]
-    );
+    try {
+      const response = await fetch('http://127.0.0.1:3000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          role: formData.role,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone_number: formData.phoneNumber
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.response === "success") {
+        Alert.alert(
+          'Account Created Successfully!',
+          `Welcome ${formData.firstName}! Your account has been created.`,
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                // Login with the new account
+                onAccountCreated(formData.email, formData.role);
+              }
+            }
+          ]
+        );
+      } else {
+        Alert.alert('Registration Error', data.response);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      Alert.alert('Error', 'Network error. Please check your connection.');
+    }
   };
 
   const renderRoleButtons = () => (
@@ -173,36 +196,9 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
       return (
         <View style={styles.roleSpecificSection}>
           <Text style={styles.sectionTitle}>Patient Information</Text>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Date of Birth</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.dateOfBirth}
-              onChangeText={(value) => updateField('dateOfBirth', value)}
-              placeholder="MM/DD/YYYY"
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Primary Caregiver Name</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.primaryCaregiverName}
-              onChangeText={(value) => updateField('primaryCaregiverName', value)}
-              placeholder="e.g., Dr. Smith or John Doe"
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Medical Record Number</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.medicalRecordNumber}
-              onChangeText={(value) => updateField('medicalRecordNumber', value)}
-              placeholder="e.g., MRN12345678"
-            />
-          </View>
+          <Text style={styles.patientNote}>
+            You can request a caregiver after creating your account and signing in.
+          </Text>
         </View>
       );
     }
@@ -217,6 +213,7 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
@@ -314,6 +311,8 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
                   placeholder="Create a secure password"
                   secureTextEntry
                   autoCapitalize="none"
+                  textContentType="none"
+                  autoComplete="off"
                 />
                 {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
               </View>
@@ -327,6 +326,8 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
                   placeholder="Confirm your password"
                   secureTextEntry
                   autoCapitalize="none"
+                  textContentType="none"
+                  autoComplete="off"
                 />
                 {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
               </View>
@@ -355,13 +356,14 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#667eea',
+    backgroundColor: '#e8f4ff',
   },
   keyboardContainer: {
     flex: 1,
   },
   scrollContainer: {
     flexGrow: 1,
+    paddingBottom: 100,
   },
   header: {
     padding: 20,
@@ -473,6 +475,13 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#f8f9fa',
     borderRadius: 8,
+  },
+  patientNote: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 10,
   },
   submitButton: {
     backgroundColor: '#667eea',

@@ -15,26 +15,33 @@ function Login({ navigation, onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  // Mock user database with roles
-  const users = {
-    'caregiver1': { password: 'password123', role: 'caregiver' },
-    'patient1': { password: 'patient123', role: 'patient' },
-    'admin': { password: 'admin123', role: 'admin' },
-    'test': { password: 'test123', role: 'unknown' }
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (username.trim() === '' || password.trim() === '') {
-      Alert.alert('Error', 'Please enter both username and password');
+      Alert.alert('Error', 'Please enter both email and password');
       return;
     }
 
-    const user = users[username.toLowerCase()];
+    try {
+      const response = await fetch('http://127.0.0.1:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: username,
+          password: password
+        })
+      });
 
-    if (user && user.password === password) {
-      onLogin(username, user.role);
-    } else {
-      Alert.alert('Error', 'Invalid username or password');
+      const data = await response.json();
+
+      if (data.response === "success") {
+        // For now, assuming all users are patients. You can add role logic later
+        onLogin(username, 'patient', data.userID);
+      } else {
+        Alert.alert('Error', data.response);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Error', 'Network error. Please check your connection.');
     }
   };
 
@@ -48,17 +55,22 @@ function Login({ navigation, onLogin }) {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.loginForm}>
-          <Text style={styles.title}>Sign In</Text>
+          <View style={styles.brandingContainer}>
+            <Text style={styles.logo}>🏥</Text>
+            <Text style={styles.appName}>CureMate</Text>
+          </View>
+          <Text style={styles.subtitle}>Your health companion that is always here for you</Text>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Username:</Text>
+            <Text style={styles.label}>Email:</Text>
             <TextInput
               style={styles.input}
               value={username}
               onChangeText={setUsername}
-              placeholder="Enter your username"
+              placeholder="Enter your email"
               autoCapitalize="none"
               autoCorrect={false}
+              keyboardType="email-address"
             />
           </View>
 
@@ -79,18 +91,17 @@ function Login({ navigation, onLogin }) {
             <Text style={styles.loginBtnText}>Sign In</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.createAccountBtn}
-            onPress={() => navigation.navigate('CreateAccountForm')}
-          >
-            <Text style={styles.createAccountText}>Create Account</Text>
-          </TouchableOpacity>
-
           <View style={styles.demoCredentials}>
-            <Text style={styles.demoTitle}>Demo accounts:</Text>
-            <Text style={styles.demoText}>Caregiver: caregiver1 / password123</Text>
-            <Text style={styles.demoText}>Patient: patient1 / patient123</Text>
-            <Text style={styles.demoText}>Unknown: test / test123</Text>
+            <Text style={styles.demoTitle}>New to CureMate?</Text>
+            <Text style={styles.demoText}>
+              <Text
+                style={styles.clickableText}
+                onPress={() => navigation.navigate('CreateAccountForm')}
+              >
+                Create your account
+              </Text>
+              <Text> to get started with personalized healthcare management</Text>
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -101,7 +112,7 @@ function Login({ navigation, onLogin }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#667eea',
+    backgroundColor: '#e8f4ff',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -109,17 +120,31 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   loginForm: {
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     padding: 30,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  },
+  brandingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  logo: {
+    fontSize: 40,
+    marginRight: 12,
+  },
+  appName: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    textAlign: 'center',
+    marginBottom: 30,
+    fontStyle: 'italic',
   },
   title: {
     fontSize: 24,
@@ -157,36 +182,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  createAccountBtn: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#667eea',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 15,
-  },
-  createAccountText: {
+  clickableText: {
+    fontSize: 14,
     color: '#667eea',
-    fontSize: 16,
-    fontWeight: '500',
+    textAlign: 'center',
+    lineHeight: 20,
+    textDecorationLine: 'underline',
   },
   demoCredentials: {
-    marginTop: 30,
-    padding: 15,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 5,
+    marginTop: 25,
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 12,
     alignItems: 'center',
   },
   demoTitle: {
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 16,
     marginBottom: 8,
-    color: '#333',
+    color: '#2c3e50',
   },
   demoText: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 2,
+    color: '#7f8c8d',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
 
