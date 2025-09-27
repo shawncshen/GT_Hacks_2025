@@ -1,20 +1,127 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import PatientDetail from './components/PatientDetail';
+import PatientDashboard from './components/PatientDashboard';
+import CreateAccount from './components/CreateAccount';
+import CreateAccountForm from './components/CreateAccountForm';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    checkAuthState();
+  }, []);
+
+  const checkAuthState = async () => {
+    try {
+      const user = await AsyncStorage.getItem('currentUser');
+      const role = await AsyncStorage.getItem('userRole');
+      if (user && role) {
+        setIsAuthenticated(true);
+        setCurrentUser(user);
+        setUserRole(role);
+      }
+    } catch (error) {
+      console.error('Error checking auth state:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogin = async (username, role) => {
+    try {
+      await AsyncStorage.setItem('currentUser', username);
+      await AsyncStorage.setItem('userRole', role);
+      setIsAuthenticated(true);
+      setCurrentUser(username);
+      setUserRole(role);
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('currentUser');
+      await AsyncStorage.removeItem('userRole');
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+      setUserRole(null);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  if (isLoading) {
+    return null; // Or loading screen
+  }
+
+  const renderAuthenticatedScreens = () => {
+    if (userRole === 'caregiver') {
+      return (
+        <>
+          <Stack.Screen name="Dashboard">
+            {props => (
+              <Dashboard
+                {...props}
+                currentUser={currentUser}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="PatientDetail">
+            {props => <PatientDetail {...props} onLogout={handleLogout} />}
+          </Stack.Screen>
+        </>
+      );
+    } else if (userRole === 'patient') {
+      return (
+        <Stack.Screen name="PatientDashboard">
+          {props => (
+            <PatientDashboard
+              {...props}
+              currentUser={currentUser}
+              onLogout={handleLogout}
+            />
+          )}
+        </Stack.Screen>
+      );
+    } else {
+      return (
+        <Stack.Screen name="CreateAccount">
+          {props => <CreateAccount {...props} onLogout={handleLogout} />}
+        </Stack.Screen>
+      );
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!isAuthenticated ? (
+          <>
+            <Stack.Screen name="Login">
+              {props => <Login {...props} onLogin={handleLogin} />}
+            </Stack.Screen>
+            <Stack.Screen name="CreateAccountForm">
+              {props => <CreateAccountForm {...props} onAccountCreated={handleLogin} />}
+            </Stack.Screen>
+          </>
+        ) : (
+          renderAuthenticatedScreens()
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
