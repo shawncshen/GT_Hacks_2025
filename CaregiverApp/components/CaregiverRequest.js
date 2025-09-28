@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   },
   requestActions: {
     flexDirection: 'row',
-    marginTop: 15,
+    marginTop: 10,
     gap: 10,
   },
   acceptBtn: {

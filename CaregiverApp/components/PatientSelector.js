@@ -32,7 +32,11 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
       const data = await response.json();
 
       if (data.response === "success") {
-        setAvailablePatients(data.patients);
+        // Filter to only show Noah His (keeping only the email noahjia@gmail.com)
+        const filteredPatients = data.patients.filter(patient =>
+          patient.email === "noahjia@gmail.com"
+        );
+        setAvailablePatients(filteredPatients);
       } else {
         Alert.alert('Error', 'Failed to fetch patients');
       }
@@ -496,7 +500,7 @@ const styles = StyleSheet.create({
   },
   requestActions: {
     flexDirection: 'row',
-    marginTop: 15,
+    marginTop: 10,
     gap: 10,
   },
   acceptBtn: {

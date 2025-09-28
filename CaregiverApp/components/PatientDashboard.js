@@ -166,8 +166,11 @@ function PatientDashboard({ navigation, currentUser, patientID, onLogout }) {
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#DC2626' }]}>
               <Text style={styles.quickActionText}>Emergency</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
-              <Text style={styles.quickActionText}>Call Doctor</Text>
+            <TouchableOpacity
+              style={[styles.quickActionCard, { backgroundColor: '#10B981' }]}
+              onPress={() => navigation.navigate('AppointmentScheduler')}
+            >
+              <Text style={styles.quickActionText}>Schedule Appointment</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
               <Text style={styles.quickActionText}>Lab Results</Text>
@@ -430,7 +433,7 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     position: 'absolute',
-    top: 60,
+    top: 5,
     right: 35,
     zIndex: 10,
   },
