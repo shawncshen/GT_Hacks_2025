@@ -1,0 +1,195 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -project /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj -configuration Debug -scheme CaregiverApp -destination id=1B134BE2-5374-4E7D-8FEA-6006AA0CB1B8
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (1 target)
+    Target 'CaregiverApp' in project 'CaregiverApp' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/ibtool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp/Images.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 1bf6439e107b9d972dc592819ff07072
+Build description path: /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/XCBuildData/1bf6439e107b9d972dc592819ff07072.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk /Users/shawnshen/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -o /Users/shawnshen/Library/Developer/Xcode/DerivedData/SDKStatCaches.noindex/iphonesimulator26.0-23A339-26257891a6c027eb51374368541b8346.sdkstatcache
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/ExplicitPrecompiledModules
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/ExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules
+
+CreateBuildDirectory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    builtin-create-build-directory /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/EagerLinkingTBDs/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp-abfe2dee70041a4b4b8aa2a75e3d6e25-VFS-iphonesimulator/all-product-headers.yaml
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp.xcodeproj
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp-abfe2dee70041a4b4b8aa2a75e3d6e25-VFS-iphonesimulator/all-product-headers.yaml
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-08A4A3CD28434E44B6B9DE2E.sh (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-08A4A3CD28434E44B6B9DE2E.sh
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-800E24972A6A228C8D4807E9.sh (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-800E24972A6A228C8D4807E9.sh
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-00DD1BFF1BD5951E006B06BC.sh (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-00DD1BFF1BD5951E006B06BC.sh
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.LinkFileList (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.LinkFileList
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp_const_extract_protocols.json (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp_const_extract_protocols.json
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.SwiftFileList (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.SwiftFileList
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp-OutputFileMap.json (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp-OutputFileMap.json
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.SwiftConstValuesFileList (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/CaregiverApp.SwiftConstValuesFileList
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/7187679823f38a2a940e0043cdf9d637-common-args.resp (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Objects-normal/arm64/7187679823f38a2a940e0043cdf9d637-common-args.resp
+-target arm64-apple-ios15.1-simulator '-std=gnu99' -fmodules -gmodules '-fmodules-cache-path=/Users/shawnshen/Library/Developer/Xcode/DerivedData/ModuleCache.noindex' -fpascal-strings -O0 -fno-common '-DDEBUG=1' '-DFB_SONARKIT_ENABLED=1' -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.0.sdk -g -iquote /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-generated-files.hmap -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-own-target-headers.hmap -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-all-target-headers.hmap -iquote /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-project-headers.hmap -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator/include -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources-normal/arm64 -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources/arm64 -I/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources -F/Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources/CaregiverApp_vers.c (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources/CaregiverApp_vers.c
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources/Entitlements-Simulated.plist (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/DerivedSources/Entitlements-Simulated.plist
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.DependencyStaticMetadataFileList (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.DependencyStaticMetadataFileList
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.DependencyMetadataFileList (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.DependencyMetadataFileList
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-project-headers.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-project-headers.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-own-target-headers.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-own-target-headers.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-generated-files.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-generated-files.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-all-target-headers.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-all-target-headers.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-all-non-framework-target-headers.hmap (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-all-non-framework-target-headers.hmap
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-DebugDylibPath-normal-arm64.txt (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-DebugDylibPath-normal-arm64.txt
+
+WriteAuxiliaryFile /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-DebugDylibInstallName-normal-arm64.txt (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    write-file /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp-DebugDylibInstallName-normal-arm64.txt
+
+MkDir /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator/CaregiverApp.app (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    /bin/mkdir -p /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Products/Debug-iphonesimulator/CaregiverApp.app
+
+ProcessProductPackaging /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp/CaregiverApp.entitlements /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    
+    Entitlements:
+    
+    {
+}
+    
+    builtin-productPackagingUtility /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp/CaregiverApp.entitlements -entitlements -format xml -o /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent
+
+ProcessProductPackaging /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp/CaregiverApp.entitlements /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    
+    Entitlements:
+    
+    {
+    "application-identifier" = "FAKETEAMID.com.anonymous.caregiverapp";
+}
+    
+    builtin-productPackagingUtility /Users/shawnshen/Downloads/Projects/GT_Hacks/ios/CaregiverApp/CaregiverApp.entitlements -entitlements -format xml -o /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent
+
+ProcessProductPackagingDER /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent.der (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    /usr/bin/derq query -f xml -i /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent -o /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app.xcent.der --raw
+
+ProcessProductPackagingDER /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent.der (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    /usr/bin/derq query -f xml -i /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent -o /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/CaregiverApp.app-Simulated.xcent.der --raw
+
+PhaseScriptExecution [CP]\ Check\ Pods\ Manifest.lock /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-08A4A3CD28434E44B6B9DE2E.sh (in target 'CaregiverApp' from project 'CaregiverApp')
+    cd /Users/shawnshen/Downloads/Projects/GT_Hacks/ios
+    /bin/sh -c /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-08A4A3CD28434E44B6B9DE2E.sh
+diff: /Podfile.lock: No such file or directory
+error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.
+
+note: Run script build phase 'Bundle React Native code and images' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'CaregiverApp' from project 'CaregiverApp')

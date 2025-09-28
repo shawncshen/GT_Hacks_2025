@@ -1,0 +1,7 @@
+{
+  "name": "CaregiverApp",
+  "displayName": "Caregiver App",
+  "ios": {
+    "bundleIdentifier": "com.anonymous.caregiverapp"
+  }
+}

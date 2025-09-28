@@ -1,0 +1,7 @@
+** BUILD FAILED **
+
+
+The following build commands failed:
+	PhaseScriptExecution [CP]\ Check\ Pods\ Manifest.lock /Users/shawnshen/Library/Developer/Xcode/DerivedData/CaregiverApp-blvoftcxdnpcwkhbnywubzygjsbb/Build/Intermediates.noindex/CaregiverApp.build/Debug-iphonesimulator/CaregiverApp.build/Script-08A4A3CD28434E44B6B9DE2E.sh (in target 'CaregiverApp' from project 'CaregiverApp')
+	Building project CaregiverApp with scheme CaregiverApp and configuration Debug
+(2 failures)
