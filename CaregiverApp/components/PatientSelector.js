@@ -20,6 +20,7 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('PatientSelector mounted with caregiverID:', caregiverID);
     fetchPatients();
     fetchAssignedPatients();
     fetchIncomingRequests();
@@ -58,14 +59,51 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
 
   const fetchIncomingRequests = async () => {
     try {
-      const response = await fetch(`${url}/incoming-requests/caregiver/${caregiverID}`);
+      console.log('Fetching notifications for caregiver ID:', caregiverID);
+      const response = await fetch(`${url}/get-notification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: caregiverID })
+      });
       const data = await response.json();
+      console.log('Notifications data:', data);
 
-      if (data.response === "success") {
-        setIncomingRequests(data.requests);
+      if (data.response === "success" && data.notifications) {
+        // Convert notifications to request format for the UI
+        const requests = await Promise.all(data.notifications.map(async (notification, index) => {
+          if (notification.sender_type === "patient") {
+            // Fetch patient details
+            const patientResponse = await fetch(`${url}/patient/${notification.sender_id}`);
+            const patientData = await patientResponse.json();
+
+            if (patientData.response === "success") {
+              return {
+                id: `${notification.sender_id}-${caregiverID}-${index}`, // Create unique ID with index
+                patient_id: notification.sender_id,
+                patient_name: `${patientData.patient.first_name} ${patientData.patient.last_name}`,
+                patient_email: patientData.patient.email,
+                message: notification.message
+              };
+            }
+          }
+          return null;
+        }));
+
+        const validRequests = requests.filter(req => req !== null);
+
+        // Remove duplicates based on patient_id to prevent duplicate keys
+        const uniqueRequests = validRequests.filter((request, index, self) =>
+          index === self.findIndex(r => r.patient_id === request.patient_id)
+        );
+
+        console.log('Setting incoming requests from notifications:', uniqueRequests);
+        setIncomingRequests(uniqueRequests);
+      } else {
+        console.log('No notifications or error:', data.response);
+        setIncomingRequests([]);
       }
     } catch (error) {
-      console.error('Error fetching incoming requests:', error);
+      console.error('Error fetching notifications:', error);
     }
   };
 
@@ -96,25 +134,52 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
 
   const respondToRequest = async (requestId, accept) => {
     try {
-      const response = await fetch(`${url}/respond-request`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          request_id: requestId,
-          accept: accept
-        })
-      });
+      // Extract patient_id from the requestId (format: "patient_id-caregiver_id")
+      const patient_id = requestId.split('-')[0];
 
-      const data = await response.json();
+      if (accept) {
+        // If accepting, add the patient to caregiver_patients table
+        const response = await fetch(`${url}/add-caregiver`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            patient_id: parseInt(patient_id),
+            caregiver_id: caregiverID
+          })
+        });
 
-      if (data.response === "success") {
-        Alert.alert('Success', accept ? 'Request accepted!' : 'Request declined.');
-        fetchIncomingRequests();
-        if (accept) {
-          fetchAssignedPatients();
+        const data = await response.json();
+
+        if (data.response === "success") {
+          // Delete the notification after successful acceptance
+          await fetch(`${url}/delete-notification`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sender_id: parseInt(patient_id),
+              receiver_id: caregiverID
+            })
+          });
+
+          Alert.alert('Success', 'Patient request accepted!');
+          fetchIncomingRequests(); // Refresh notifications
+          fetchAssignedPatients(); // Refresh assigned patients
+        } else {
+          Alert.alert('Error', data.response);
         }
       } else {
-        Alert.alert('Error', data.response);
+        // If declining, delete the notification
+        await fetch(`${url}/delete-notification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sender_id: parseInt(patient_id),
+            receiver_id: caregiverID
+          })
+        });
+
+        Alert.alert('Success', 'Request declined.');
+        fetchIncomingRequests(); // Refresh to remove from display
       }
     } catch (error) {
       console.error('Error responding to request:', error);
@@ -136,6 +201,9 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
       </SafeAreaView>
     );
   }
+
+  console.log('PatientSelector render - incomingRequests:', incomingRequests);
+  console.log('PatientSelector render - incomingRequests.length:', incomingRequests.length);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -163,11 +231,21 @@ function PatientSelector({ navigation, currentUser, caregiverID, onLogout }) {
             <Text style={styles.emptyText}>No patients assigned yet</Text>
           ) : (
             assignedPatients.map((patient) => (
-              <View key={patient.patient_id} style={[styles.patientCard, styles.assignedCard]}>
-                <Text style={styles.patientName}>{patient.first_name} {patient.last_name}</Text>
-                <Text style={styles.patientEmail}>{patient.email}</Text>
-                <Text style={styles.assignedLabel}>✓ Assigned</Text>
-              </View>
+              <TouchableOpacity
+                key={patient.patient_id}
+                style={[styles.patientCard, styles.assignedCard]}
+                onPress={() => navigation.navigate('PrescriptionManager', { patient, caregiverID })}
+                activeOpacity={0.7}
+              >
+                <View style={styles.patientInfo}>
+                  <Text style={styles.patientName}>{patient.first_name} {patient.last_name}</Text>
+                  <Text style={styles.patientEmail}>{patient.email}</Text>
+                </View>
+                <View style={styles.patientActions}>
+                  <Text style={styles.assignedLabel}>✓ Assigned</Text>
+                  <Text style={styles.manageText}>Manage Prescriptions →</Text>
+                </View>
+              </TouchableOpacity>
             ))
           )}
         </View>
@@ -369,6 +447,15 @@ const styles = StyleSheet.create({
     color: '#2ecc71',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  patientActions: {
+    alignItems: 'flex-end',
+  },
+  manageText: {
+    color: '#667eea',
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 4,
   },
   doneBtn: {
     backgroundColor: '#2ecc71',

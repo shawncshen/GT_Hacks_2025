@@ -34,8 +34,7 @@ function Login({ navigation, onLogin }) {
       const data = await response.json();
 
       if (data.response === "success") {
-        // For now, assuming all users are patients. You can add role logic later
-        onLogin(username, 'patient', data.userID);
+        onLogin(username, data.role, data.userID);
       } else {
         Alert.alert('Error', data.response);
       }

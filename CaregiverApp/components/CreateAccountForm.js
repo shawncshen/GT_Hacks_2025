@@ -25,7 +25,6 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
     phoneNumber: '',
     // Caregiver specific
     professionalId: '',
-    workplace: '',
     // Patient specific
     dateOfBirth: '',
     primaryCaregiverName: '',
@@ -179,15 +178,7 @@ function CreateAccountForm({ navigation, onAccountCreated }) {
             />
           </View>
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Workplace / Organization</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.workplace}
-              onChangeText={(value) => updateField('workplace', value)}
-              placeholder="e.g., City General Hospital"
-            />
-          </View>
+
         </View>
       );
     }

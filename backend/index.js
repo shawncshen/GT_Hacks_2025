@@ -23,19 +23,33 @@ db.connect();
 app.use(express.json());
 app.use(cors());
 
+//Login patient or caregiver
 app.post("/login", async (req, res) => {
   try{
     const email = req.body.email;
     const password = req.body.password;
 
-    const checkUser = await db.query("select * from patients where email = $1", [email]);
-    if(checkUser.rows.length > 0){
-      bcrypt.compare(password, checkUser.rows[0].password, (err, result) => {
+    const checkPatientUser = await db.query("select * from patients where email = $1", [email]);
+    const checkCareUser = await db.query("select * from caregivers where email = $1", [email]);
+    if(checkCareUser.rows.length > 0){
+      bcrypt.compare(password, checkCareUser.rows[0].password, (err, result) => {
         if (err){
           console.log(err);
         } else {
           if (result){
-            res.json({"response": "success", "userID": checkUser.rows[0].patient_id});
+            res.json({"response": "success", "userID": checkCareUser.rows[0].caregiver_id, "role": "caregiver"});
+          } else {
+            res.json({"response": "Incorrect password"});
+          }
+        }
+      })
+    } else if (checkPatientUser.rows.length > 0){
+      bcrypt.compare(password, checkPatientUser.rows[0].password, (err, result) => {
+        if (err){
+          console.log(err);
+        } else {
+          if (result){
+            res.json({"response": "success", "userID": checkPatientUser.rows[0].patient_id, "role": "patient"});
           } else {
             res.json({"response": "Incorrect password"});
           }
@@ -237,21 +251,32 @@ app.post("/request-caregiver", async (req, res) => {
 
 
     // Check if already connected
-    // const existingConnection = await db.query(
-    //   "SELECT * FROM caregiver_patients WHERE patient_id = $1 AND caregiver_id = $2",
-    //   [patient_id, caregiver_id]
-    // );
+    const existingConnection = await db.query(
+      "SELECT * FROM caregiver_patients WHERE patient_id = $1 AND caregiver_id = $2",
+      [patient_id, caregiver_id]
+    );
 
-    // if (existingConnection.rows.length > 0) {
-    //   res.json({"response": "Already connected to this caregiver"});
-    //   return;
-    // }
+    if (existingConnection.rows.length > 0) {
+      res.json({"response": "Already connected to this caregiver"});
+      return;
+    }
 
-    // // Create request
-    // await db.query(
-    //   "INSERT INTO caregiver_requests (patient_id, caregiver_id, patient_email, caregiver_email, status, request_type) VALUES ($1, $2, $3, $4, 'pending', 'patient_to_caregiver')",
-    //   [patient_id, caregiver_id, patient_email, caregiver_email]
-    // );
+    // Check if request already exists
+    const existingRequest = await db.query(
+      "SELECT * FROM caregiver_requests WHERE patient_id = $1 AND caregiver_id = $2 AND status = 'pending'",
+      [patient_id, caregiver_id]
+    );
+
+    if (existingRequest.rows.length > 0) {
+      res.json({"response": "Request already sent to this caregiver"});
+      return;
+    }
+
+    // Get patient email for the request
+    const patientData = await db.query("SELECT email FROM patients WHERE patient_id = $1", [patient_id]);
+    const patient_email = patientData.rows[0]?.email;
+
+    // Request successfully created in notifications table above
 
     res.json({"response": "success"});
   } catch (error) {
@@ -262,12 +287,24 @@ app.post("/request-caregiver", async (req, res) => {
 
 //In dashboard, when user clicks on their notification, pull their notifications from notification table
 app.post("/get-notification", async(req, res) => {
-  const user_id = req.body.user_id;
-  const result = db.query("select message, sender_id, sender_type from notifications where receiver_id = $1", [user_id]);
-  if (result.rows[0].length > 0){
-    const modal = {"sender_id": result.rows[0].sender_id, "sender_type": result.rows[0].sender_type, "message": result.rows[0].message};
-    res.json({"response": "success", "modal": modal});
-  } 
+  try {
+    const user_id = req.body.user_id;
+    const result = await db.query("select message, sender_id, sender_type from notifications where receiver_id = $1", [user_id]);
+
+    if (result.rows.length > 0){
+      const notifications = result.rows.map(row => ({
+        "sender_id": row.sender_id,
+        "sender_type": row.sender_type,
+        "message": row.message
+      }));
+      res.json({"response": "success", "notifications": notifications});
+    } else {
+      res.json({"response": "success", "notifications": []});
+    }
+  } catch (error) {
+    console.log("Error fetching notifications:", error);
+    res.json({"response": "Error fetching notifications"});
+  }
 });
 
 app.post("/add-caregiver", async (req, res) => {
@@ -280,7 +317,19 @@ app.post("/add-caregiver", async (req, res) => {
   } catch (error){
     res.json({"response": error});
   }
-  
+
+});
+
+// Delete notification after caregiver responds to request
+app.post("/delete-notification", async (req, res) => {
+  try {
+    const { sender_id, receiver_id } = req.body;
+    await db.query("DELETE FROM notifications WHERE sender_id = $1 AND receiver_id = $2 AND sender_type = 'patient' AND receiver_type = 'caregiver'", [sender_id, receiver_id]);
+    res.json({"response": "success"});
+  } catch (error) {
+    console.log("Error deleting notification:", error);
+    res.json({"response": "Error deleting notification"});
+  }
 });
 
 // Get pending requests sent by patient
@@ -423,7 +472,35 @@ app.get("/pending-requests/caregiver/:caregiver_id", async (req, res) => {
 });
 
 app.post("/post-prescription", async (req, res) => {
+  const {patient_id, prescriptions} = req.body;
 
+  try {
+    console.log('Adding prescriptions for patient:', patient_id);
+    console.log('Prescriptions data:', prescriptions);
+
+    for (const p of prescriptions){
+      await db.query("insert into prescriptions (prescription_name, prescription_amount, prescription_frequency, patient_id) values ($1, $2, $3, $4)", [
+        p.name, p.amount, p.frequency, patient_id
+      ]);
+    }
+    res.json({"response": "success"});
+  } catch (error){
+    console.log("Error adding prescriptions:", error);
+    res.json({"response": "Error adding prescriptions"});
+  }
+});
+
+// Get prescriptions for a specific patient
+app.get("/patient-prescriptions/:patient_id", async (req, res) => {
+  try {
+    const patient_id = req.params.patient_id;
+    const result = await db.query("SELECT prescription_name, prescription_amount, prescription_frequency FROM prescriptions WHERE patient_id = $1 ORDER BY prescription_name", [patient_id]);
+
+    res.json({"response": "success", "prescriptions": result.rows});
+  } catch (error) {
+    console.log("Error fetching patient prescriptions:", error);
+    res.json({"response": "Error fetching prescriptions"});
+  }
 });
 
 app.listen(3001, '0.0.0.0', () => {

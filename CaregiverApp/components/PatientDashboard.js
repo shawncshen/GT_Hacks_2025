@@ -157,20 +157,23 @@ function PatientDashboard({ navigation, currentUser, patientID, onLogout }) {
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
               <Text style={styles.quickActionText}>Add Symptom</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
-              <Text style={styles.quickActionText}>Call Doctor</Text>
+            <TouchableOpacity
+              style={[styles.quickActionCard, { backgroundColor: '#667eea' }]}
+              onPress={() => navigation.navigate('PrescriptionAlerts', { patientID })}
+            >
+              <Text style={styles.quickActionText}>View Alerts</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#DC2626' }]}>
               <Text style={styles.quickActionText}>Emergency</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
-              <Text style={styles.quickActionText}>Pharmacy</Text>
+              <Text style={styles.quickActionText}>Call Doctor</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
               <Text style={styles.quickActionText}>Lab Results</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.quickActionCard, { backgroundColor: '#6B7280' }]}>
-              <Text style={styles.quickActionText}>Insurance</Text>
+              <Text style={styles.quickActionText}>Pharmacy</Text>
             </TouchableOpacity>
           </View>
         </View>

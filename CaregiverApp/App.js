@@ -12,6 +12,8 @@ import PatientSelector from './components/PatientSelector';
 import CaregiverRequest from './components/CaregiverRequest';
 import ChatBot from './components/ChatBot';
 import Profile from './components/Profile';
+import PrescriptionManager from './components/PrescriptionManager';
+import PrescriptionAlerts from './components/PrescriptionAlerts';
 
 const Stack = createNativeStackNavigator();
 
@@ -102,6 +104,15 @@ function App() {
           <Stack.Screen name="PatientDetail">
             {props => <PatientDetail {...props} onLogout={handleLogout} />}
           </Stack.Screen>
+          <Stack.Screen name="PrescriptionManager">
+            {props => (
+              <PrescriptionManager
+                {...props}
+                caregiverID={userID}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
         </>
       );
     } else if (userRole === 'patient') {
@@ -140,6 +151,15 @@ function App() {
               <Profile
                 {...props}
                 currentUser={currentUser}
+                patientID={userID}
+                onLogout={handleLogout}
+              />
+            )}
+          </Stack.Screen>
+          <Stack.Screen name="PrescriptionAlerts">
+            {props => (
+              <PrescriptionAlerts
+                {...props}
                 patientID={userID}
                 onLogout={handleLogout}
               />

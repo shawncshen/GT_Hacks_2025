@@ -59,6 +59,7 @@ function CaregiverRequest({ navigation, currentUser, patientID, onLogout }) {
     } catch (error) {
       console.error('Error fetching requests:', error);
     }
+    setLoading(false);
   };
 
   const requestCaregiverByEmail = async () => {
@@ -173,7 +174,6 @@ function CaregiverRequest({ navigation, currentUser, patientID, onLogout }) {
             <View style={[styles.caregiverCard, styles.myCard]}>
               <Text style={styles.caregiverName}>{myCaregiver.first_name} {myCaregiver.last_name}</Text>
               <Text style={styles.caregiverEmail}>{myCaregiver.email}</Text>
-              <Text style={styles.caregiverWorkplace}>{myCaregiver.workplace || 'Healthcare Professional'}</Text>
               <Text style={styles.assignedLabel}>✓ Your Caregiver</Text>
             </View>
           </View>
@@ -367,11 +367,7 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 2,
   },
-  caregiverWorkplace: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 2,
-  },
+
   requestBtn: {
     backgroundColor: '#667eea',
     paddingHorizontal: 20,
