@@ -23,6 +23,7 @@ db.connect();
 app.use(express.json());
 app.use(cors());
 
+//Login patient or caregiver
 app.post("/login", async (req, res) => {
   try{
     const email = req.body.email;
@@ -50,6 +51,7 @@ app.post("/login", async (req, res) => {
 
 });
 
+//Register patient or caregiver
 app.post("/register", async (req, res) => {
   try {
     const email = req.body.email;
@@ -101,21 +103,29 @@ app.post("/register", async (req, res) => {
 });
 
 //This one is for adding prescriptions for the patient (Potentially done through caregiver)
-app.post("post-prescription", async (req, res) => {
-  const prescription_name = req.body.prescription_name;
-  const prescription_amount = req.body.prescription_amount;
-  const prescription_frequency = req.body.prescription_frequency;
-  const patient_id = req.body.patient_id;
+app.post("/post-prescriptions", async (req, res) => {
+  const {patient_id, prescriptions} = req.body;
 
   try{
-    const result = await db.query("insert into prescriptions (patient_id, prescription_name, prescription_amount, prescription_frequency) values ($1, $2, $3, $4)", [patient_id, prescription_name, prescription_amount, prescription_frequency]);
-    res.json({"response": "success"})
+    const addedPrescriptions = [];
+    for (const p of prescriptions){
+      const result = await db.query("insert into prescriptions (prescription_name, prescription_amount, prescription_frequency, patient_id) values ($1, $2, $3, $4)", 
+        [p.name, p.amount, p.frequency, patient_id]
+      );
+
+    }
+    
+    addedPrescriptions.push(result.rows[0]);
+
+    res.json({"response": "success", "prescriptions": addedPrescriptions});
   } catch (error){
+    console.log(error);
     res.json({"response": error});
   }
 
 });
 
+//Sends either patient to caregiver or caregiver to patient
 app.post("/send-notification", async (req, res) => {
   const sender_id = req.body.sender_id;
   const receiver_email = req.body.receiver_email;
@@ -146,7 +156,39 @@ app.post("/send-notification", async (req, res) => {
     res.json({"response": error});
   }
   
-  
+});
+
+//Gets pending notifications for whichever user is logged in (Patient or Caregiver)
+app.post("/get-notifications", async (req, res) => {
+  const user_id = req.body.user_id;
+  const user_type = req.body.user_type;
+
+  try {
+    const result = await db.query(
+      "select message, sender_id, sender_type from notifications where receiver_id = $1 and receiver_type = $2", 
+      [user_id, user_type]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({"response": "No notifications found", "notifications": []});
+    }
+
+    // Extract all messages and full notification data
+    const notifications = result.rows.map(row => ({
+      message: row.message,
+      sender_id: row.sender_id,
+      sender_type: row.sender_type,
+    }));
+
+    res.json({
+      "response": "success",
+      "notifications": notifications,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.json({"response": "Server error", "notifications": []});
+  }
 });
 
 app.listen(3000, () => {
