@@ -120,7 +120,7 @@ app.get("/patients", async (req, res) => {
 // Get all available caregivers for patient to select
 app.get("/caregivers", async (req, res) => {
   try {
-    const result = await db.query("SELECT caregiver_id, email, first_name, last_name, workplace FROM caregivers ORDER BY first_name, last_name");
+    const result = await db.query("SELECT caregiver_id, email, first_name, last_name FROM caregivers ORDER BY first_name, last_name");
     res.json({"response": "success", "caregivers": result.rows});
   } catch (error) {
     console.log("Error fetching caregivers:", error);
@@ -150,7 +150,7 @@ app.get("/patient-caregiver/:patient_id", async (req, res) => {
   try {
     const patient_id = req.params.patient_id;
     const result = await db.query(`
-      SELECT c.caregiver_id, c.email, c.first_name, c.last_name, c.workplace
+      SELECT c.caregiver_id, c.email, c.first_name, c.last_name
       FROM caregivers c
       JOIN caregiver_patients cp ON c.caregiver_id = cp.caregiver_id
       WHERE cp.patient_id = $1
@@ -210,10 +210,10 @@ app.get("/caregiver-patients/:caregiver_id", async (req, res) => {
   }
 });
 
-// Request caregiver by email (patient requesting caregiver)
+// Request caregiver by adding to notification table (patient requesting caregiver)
 app.post("/request-caregiver", async (req, res) => {
   try {
-    const { patient_id, caregiver_email, patient_email } = req.body;
+    const { patient_id, caregiver_email } = req.body;
 
     // Check if caregiver exists
     const caregiverCheck = await db.query("SELECT caregiver_id, first_name, last_name FROM caregivers WHERE email = $1", [caregiver_email]);
@@ -226,38 +226,61 @@ app.post("/request-caregiver", async (req, res) => {
     const caregiver_id = caregiverCheck.rows[0].caregiver_id;
 
     // Check if request already exists
-    const existingRequest = await db.query(
-      "SELECT * FROM caregiver_requests WHERE patient_id = $1 AND caregiver_id = $2 AND status = 'pending'",
-      [patient_id, caregiver_id]
-    );
+    // const existingRequest = await db.query(
+    //   "SELECT * FROM caregiver_requests WHERE patient_id = $1 AND caregiver_id = $2 AND status = 'pending'",
+    //   [patient_id, caregiver_id]
+    // );
 
-    if (existingRequest.rows.length > 0) {
-      res.json({"response": "Request already sent to this caregiver"});
-      return;
-    }
+    const putNotification = await db.query("insert into notifications (sender_id, sender_type, receiver_id, receiver_type, message) values ($1, $2, $3, $4, $5)", [
+      patient_id, "patient", caregiver_id, "caregiver", `${patient_id} sends request to ${caregiver_id}`
+    ]);
+
 
     // Check if already connected
-    const existingConnection = await db.query(
-      "SELECT * FROM caregiver_patients WHERE patient_id = $1 AND caregiver_id = $2",
-      [patient_id, caregiver_id]
-    );
+    // const existingConnection = await db.query(
+    //   "SELECT * FROM caregiver_patients WHERE patient_id = $1 AND caregiver_id = $2",
+    //   [patient_id, caregiver_id]
+    // );
 
-    if (existingConnection.rows.length > 0) {
-      res.json({"response": "Already connected to this caregiver"});
-      return;
-    }
+    // if (existingConnection.rows.length > 0) {
+    //   res.json({"response": "Already connected to this caregiver"});
+    //   return;
+    // }
 
-    // Create request
-    await db.query(
-      "INSERT INTO caregiver_requests (patient_id, caregiver_id, patient_email, caregiver_email, status, request_type) VALUES ($1, $2, $3, $4, 'pending', 'patient_to_caregiver')",
-      [patient_id, caregiver_id, patient_email, caregiver_email]
-    );
+    // // Create request
+    // await db.query(
+    //   "INSERT INTO caregiver_requests (patient_id, caregiver_id, patient_email, caregiver_email, status, request_type) VALUES ($1, $2, $3, $4, 'pending', 'patient_to_caregiver')",
+    //   [patient_id, caregiver_id, patient_email, caregiver_email]
+    // );
 
     res.json({"response": "success"});
   } catch (error) {
     console.log("Error requesting caregiver:", error);
     res.json({"response": "Error sending request"});
   }
+});
+
+//In dashboard, when user clicks on their notification, pull their notifications from notification table
+app.post("/get-notification", async(req, res) => {
+  const user_id = req.body.user_id;
+  const result = db.query("select message, sender_id, sender_type from notifications where receiver_id = $1", [user_id]);
+  if (result.rows[0].length > 0){
+    const modal = {"sender_id": result.rows[0].sender_id, "sender_type": result.rows[0].sender_type, "message": result.rows[0].message};
+    res.json({"response": "success", "modal": modal});
+  } 
+});
+
+app.post("/add-caregiver", async (req, res) => {
+  const patient_id = req.body.patient_id;
+  const caregiver_id = req.body.caregiver_id;
+
+  try {
+    const result = await db.query("insert into caregiver_patients (caregiver_id, patient_id) values ($1, $2)", [caregiver_id, patient_id]);
+    res.json({"response": "success"});
+  } catch (error){
+    res.json({"response": error});
+  }
+  
 });
 
 // Get pending requests sent by patient
